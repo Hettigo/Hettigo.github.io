@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#050505">
   <meta name="description" content="Isuru's personal drive: projects, notes, and a few useful experiments.">
   <title>i:\ — Isuru's personal drive</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=mobile-fix-1">
+  <script src="app.js?v=mobile-fix-1" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#terminal">Skip to terminal</a>
@@ -20,7 +20,7 @@
       <form id="prompt-form" class="prompt-form" autocomplete="off">
         <label for="command-input" class="prompt-path">i:\&gt;</label>
         <input id="command-input" name="command" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="DOS command" enterkeyhint="go">
-        <button id="enter-button" type="submit" aria-label="Run command" hidden>ENTER <span aria-hidden="true">↵</span></button>
+        <button id="enter-button" type="submit" aria-label="Run command">ENTER <span aria-hidden="true">↵</span></button>
       </form>
       <p id="hint" class="hint" role="status">TYPING...</p>
       <div id="quick-commands" class="quick-commands" hidden aria-label="Available commands"></div>
