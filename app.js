@@ -2,8 +2,10 @@
   const transcript = document.querySelector('#transcript');
   const form = document.querySelector('#prompt-form');
   const input = document.querySelector('#command-input');
+  const enterButton = document.querySelector('#enter-button');
   const hint = document.querySelector('#hint');
   const quick = document.querySelector('#quick-commands');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const sequence = ['TYPE ABOUT.TXT', 'DIR PROJECTS', 'TYPE NOTES.TXT', 'NET CONTACT'];
   const commands = {
     'TYPE ABOUT.TXT': 'about-template',
@@ -20,20 +22,54 @@
   const aliases = {'COLAB.EXE': 'TYPE COLAB.TXT', 'NEURASENSE.WEB': 'TYPE NEURASENSE.TXT', 'VIBE.PROTO': 'TYPE VIBE.TXT'};
   const history = [];
   let historyAt = 0;
+  let typingTimer = null;
   const done = new Set();
 
   function nextCommand() {
     return sequence.find(command => !done.has(command)) || '';
   }
 
+  function typeCommand(command) {
+    if (typingTimer) clearInterval(typingTimer);
+    typingTimer = null;
+    input.value = '';
+    input.readOnly = true;
+    enterButton.hidden = true;
+    hint.textContent = 'TYPING...';
+    let position = 0;
+    const finish = () => {
+      if (typingTimer) clearInterval(typingTimer);
+      typingTimer = null;
+      input.value = command;
+      input.readOnly = false;
+      enterButton.hidden = false;
+      hint.textContent = 'Press Enter to run ' + command + '. Tap the Enter key on mobile.';
+    };
+    if (reducedMotion.matches) {
+      finish();
+      return;
+    }
+    typingTimer = setInterval(() => {
+      position += 1;
+      input.value = command.slice(0, position);
+      if (position >= command.length) finish();
+    }, 55);
+  }
+
   function setPrompt() {
     const next = nextCommand();
-    input.value = next;
     input.placeholder = next ? '' : 'TYPE HELP OR A COMMAND';
-    hint.textContent = next
-      ? 'Press Enter to run ' + next + '. Tap the Enter key on mobile.'
-      : 'Type a command, or choose one below and press Enter.';
     quick.hidden = Boolean(next);
+    if (next) {
+      typeCommand(next);
+      return;
+    }
+    if (typingTimer) clearInterval(typingTimer);
+    typingTimer = null;
+    input.value = '';
+    input.readOnly = false;
+    enterButton.hidden = true;
+    hint.textContent = 'Type a command, or choose one below and press Enter.';
     if (!next) {
       quick.replaceChildren();
       for (const command of ['DIR PROJECTS', 'TYPE COLAB.TXT', 'TYPE NOTES.TXT', 'NET CONTACT', 'HELP']) {
@@ -41,7 +77,8 @@
         button.type = 'button';
         button.textContent = command;
         button.addEventListener('click', () => {
-          input.value = command;
+          typeCommand(command);
+          button.blur();
         });
         quick.append(button);
       }
@@ -69,7 +106,8 @@
     const fragment = template.content.cloneNode(true);
     fragment.querySelectorAll('[data-command]').forEach(button => {
       button.addEventListener('click', () => {
-        input.value = button.dataset.command;
+        typeCommand(button.dataset.command);
+        button.blur();
         form.scrollIntoView({behavior: 'smooth', block: 'end'});
       });
     });
@@ -118,24 +156,34 @@
 
   form.addEventListener('submit', event => {
     event.preventDefault();
+    if (typingTimer || enterButton.hidden) return;
     run(input.value);
   });
+  input.addEventListener('input', () => {
+    if (typingTimer) return;
+    const command = input.value.trim();
+    enterButton.hidden = !command;
+    hint.textContent = command ? 'Press Enter to run ' + command.toUpperCase() + '.' : 'Type a command, or choose one below and press Enter.';
+  });
   input.addEventListener('keydown', event => {
+    if (input.readOnly) return;
     if (event.key === 'ArrowUp' && history.length) {
       event.preventDefault();
       historyAt = Math.max(0, historyAt - 1);
       input.value = history[historyAt];
+      enterButton.hidden = false;
     } else if (event.key === 'ArrowDown' && history.length) {
       event.preventDefault();
       historyAt = Math.min(history.length, historyAt + 1);
       input.value = history[historyAt] || '';
+      enterButton.hidden = !input.value;
     }
   });
   document.addEventListener('keydown', event => {
     if (event.key !== 'Enter' || event.defaultPrevented || event.repeat || event.isComposing) return;
     const active = document.activeElement;
     if (active && active !== document.body && active !== document.documentElement) return;
-    if (!nextCommand()) return;
+    if (enterButton.hidden || typingTimer) return;
     event.preventDefault();
     run(input.value);
   });

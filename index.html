@@ -20,9 +20,9 @@
       <form id="prompt-form" class="prompt-form" autocomplete="off">
         <label for="command-input" class="prompt-path">i:\&gt;</label>
         <input id="command-input" name="command" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="DOS command" enterkeyhint="go">
-        <button id="enter-button" type="submit" aria-label="Run command">ENTER <span aria-hidden="true">↵</span></button>
+        <button id="enter-button" type="submit" aria-label="Run command" hidden>ENTER <span aria-hidden="true">↵</span></button>
       </form>
-      <p id="hint" class="hint">Press Enter to open ABOUT.TXT. On mobile, tap the Enter key.</p>
+      <p id="hint" class="hint" role="status">TYPING...</p>
       <div id="quick-commands" class="quick-commands" hidden aria-label="Available commands"></div>
     </main>
     <footer><span>COLOMBO / SRI LANKA</span><span>NO TRACKING. NO LOGIN. JUST FILES.</span><button id="top-button" type="button">TOP ↑</button></footer>
