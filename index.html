@@ -1,109 +1,111 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Isuru Hettigoda — personal interests and development projects from Colombo, Sri Lanka." />
-    <meta name="theme-color" content="#050505" />
-    <meta property="og:title" content="Isuru Hettigoda — Personal Projects" />
-    <meta property="og:description" content="Personal interests and development projects from Colombo, Sri Lanka." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://hettigo.github.io/" />
-    <title>ISURU.EXE — Personal Projects</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="Isuru's personal drive: projects, notes, and a few useful experiments.">
+  <title>i:\ — Isuru's personal drive</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#terminal">Skip to terminal</a>
+  <div class="monitor">
+    <header class="machine-bar"><span>i:\</span><span>ISURU'S PERSONAL DRIVE</span><span class="machine-status">READY <i aria-hidden="true"></i></span></header>
+    <main id="terminal" class="terminal" aria-label="Isuru's interactive personal site">
+      <div class="boot" aria-hidden="true"><span>ISURU.SYS</span><span>PERSONAL DRIVE / BUILD 01</span></div>
+      <p class="boot-line">Starting at <strong>i:\</strong> …</p>
+      <div id="transcript" class="transcript" aria-live="polite" aria-relevant="additions"></div>
+      <form id="prompt-form" class="prompt-form" autocomplete="off">
+        <label for="command-input" class="prompt-path">i:\&gt;</label>
+        <input id="command-input" name="command" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="DOS command" enterkeyhint="go">
+        <button id="enter-button" type="submit" aria-label="Run command">ENTER <span aria-hidden="true">↵</span></button>
+      </form>
+      <p id="hint" class="hint">Press Enter to open ABOUT.TXT. On mobile, tap the Enter key.</p>
+      <div id="quick-commands" class="quick-commands" hidden aria-label="Available commands"></div>
+    </main>
+    <footer><span>COLOMBO / SRI LANKA</span><span>NO TRACKING. NO LOGIN. JUST FILES.</span><button id="top-button" type="button">TOP ↑</button></footer>
+  </div>
 
-    <div class="screen">
-      <header class="system-bar" aria-label="System status">
-        <span>ISURU-DOS 6.22</span>
-        <span id="clock">COLOMBO / UTC+05:30</span>
-      </header>
+  <template id="about-template">
+    <section class="output about-output" aria-label="About Isuru">
+      <div class="file-meta"><span>ABOUT.TXT</span><span>READ ONLY</span></div>
+      <h1>Hi, I'm Isuru<span class="cursor">_</span></h1>
+      <p class="large">I build things to see if an idea can become useful.</p>
+      <p>I work in banking. Outside that world, I make digital products, test ideas, and follow questions long enough to build an answer. Sometimes the two worlds meet.</p>
+      <p class="aside">Current location: Colombo, Sri Lanka<br>Current status: still building</p>
+    </section>
+  </template>
 
-      <main id="main">
-        <section class="boot" aria-labelledby="name">
-          <p class="muted">C:\&gt; TYPE PROFILE.TXT</p>
-          <h1 id="name">ISURU HETTIGODA</h1>
-          <p class="role">Personal interests, experiments, and development projects.</p>
-          <dl class="facts">
-            <div><dt>LOCATION</dt><dd>Colombo, Sri Lanka</dd></div>
-            <div><dt>STATUS</dt><dd>Building, learning, maintaining</dd></div>
-            <div><dt>FILES</dt><dd>03 public repositories</dd></div>
-          </dl>
-        </section>
+  <template id="projects-template">
+    <section class="output dir-output" aria-label="Project directory">
+      <div class="file-meta"><span>DIRECTORY OF i:\PROJECTS</span><span>3 FILES</span></div>
+      <div class="dir-head"><span>NAME</span><span>TYPE</span><span>OPEN</span></div>
+      <div class="dir-row"><strong>COLAB.EXE</strong><span>APPLICATION</span><button type="button" data-command="TYPE COLAB.TXT">TYPE FILE</button></div>
+      <div class="dir-row"><strong>NEURASENSE.WEB</strong><span>WEBSITE</span><button type="button" data-command="TYPE NEURASENSE.TXT">TYPE FILE</button></div>
+      <div class="dir-row"><strong>VIBE.PROTO</strong><span>PROTOTYPE</span><button type="button" data-command="TYPE VIBE.TXT">TYPE FILE</button></div>
+      <p class="dir-tail">3 FILE(S) &nbsp; 0 DIR(S)</p>
+      <p class="output-note">Type a file name to inspect it. COLAB.EXE is a good place to start.</p>
+    </section>
+  </template>
 
-        <nav class="command-menu" aria-label="Page sections">
-          <span class="prompt">C:\&gt;</span>
-          <a href="#projects">DIR PROJECTS</a>
-          <a href="#about">TYPE ABOUT.TXT</a>
-          <a href="#contact">NET CONTACT</a>
-        </nav>
+  <template id="notes-template">
+    <section class="output text-output" aria-label="Project notes">
+      <div class="file-meta"><span>NOTES.TXT</span><span>READ ONLY</span></div>
+      <p>A messy problem starts to become useful when it takes the shape of a clear system.</p>
+      <p>coLab brings scattered plans, decisions and comments into one shared workspace. Neurasense explores how several products can feel like one family. Vibe experiments with groups forming around shared goals.</p>
+      <p>Across these projects, a question becomes a prototype; feedback from collaborators and real use keeps changing the answer.</p>
+    </section>
+  </template>
 
-        <section id="projects" class="section" aria-labelledby="projects-title">
-          <div class="section-title">
-            <h2 id="projects-title">DIRECTORY OF C:\PROJECTS</h2>
-            <span>3 FILE(S)</span>
-          </div>
+  <template id="contact-template">
+    <section class="output contact-output" aria-label="Contact Isuru">
+      <div class="file-meta"><span>CONTACT.DAT</span><span>NEW MESSAGE</span></div>
+      <form class="email-form" data-email-form>
+        <label>SUBJECT<input name="subject" type="text" maxlength="180" required autocomplete="off" placeholder="What is this about?"></label>
+        <label>MESSAGE<textarea name="body" rows="6" maxlength="4000" required placeholder="Write your message here..."></textarea></label>
+        <button type="submit">OPEN EMAIL APP <span aria-hidden="true">↵</span></button>
+        <p class="form-note">Your email app will open with this message ready to review and send.</p>
+      </form>
+      <div class="social-icons" aria-label="Other places to find Isuru">
+        <a href="https://github.com/Hettigo" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6.766 11.328c-2.063-.25-3.516-1.734-3.516-3.656 0-.781.281-1.625.75-2.188-.203-.515-.172-1.609.063-2.062.625-.078 1.468.25 1.968.703.594-.187 1.219-.281 1.985-.281.765 0 1.39.094 1.953.265.484-.437 1.344-.765 1.969-.687.218.422.25 1.515.046 2.047.5.593.766 1.39.766 2.203 0 1.922-1.453 3.375-3.547 3.64.531.344.89 1.094.89 1.954v1.625c0 .468.391.734.86.547C13.781 14.359 16 11.53 16 8.03 16 3.61 12.406 0 7.984 0 3.563 0 0 3.61 0 8.031a7.88 7.88 0 0 0 5.172 7.422c.422.156.828-.125.828-.547v-1.25c-.219.094-.5.156-.75.156-1.031 0-1.64-.562-2.078-1.609-.172-.422-.36-.672-.719-.719-.187-.015-.25-.093-.25-.187 0-.188.313-.328.625-.328.453 0 .844.281 1.25.86.313.452.64.655 1.031.655s.641-.14 1-.5c.266-.265.47-.5.657-.656"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/isuruhettigoda/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 8.5h3v11h-3zM6 4a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 6 4zM10 8.5h2.9V10c.5-.9 1.6-1.8 3.5-1.8 3.1 0 4.1 1.9 4.1 4.8v6.5h-3v-5.8c0-1.5-.3-2.6-1.9-2.6-1.5 0-2.4 1-2.4 2.6v5.8H10z"/></svg>
+        </a>
+      </div>
+    </section>
+  </template>
 
-          <div class="project-list">
-            <article class="project">
-              <div class="project-head">
-                <h3>HETTIGO.GITHUB.IO</h3>
-                <span class="file-type">CSS</span>
-              </div>
-              <p>Personal developer portfolio for Isuru Hettigoda.</p>
-              <a href="https://github.com/Hettigo/Hettigo.github.io" target="_blank" rel="noreferrer">OPEN REPOSITORY</a>
-            </article>
+  <template id="colab-template">
+    <section class="output project-output" aria-label="coLab project">
+      <div class="file-meta"><span>COLAB.TXT</span><span>APPLICATION</span></div>
+      <h2>coLab</h2><p class="large">A shared place for the work behind the work.</p>
+      <p>A team project tracker that keeps milestones, tasks, comments, decisions and previews close to the projects they belong to. Its dashboard puts projects beside the work that needs attention today.</p>
+      <div class="spec"><span>BUILT WITH</span><span>Next.js · TypeScript · PostgreSQL · Prisma</span></div>
+      <a class="external" href="https://collabspace-five.vercel.app" target="_blank" rel="noopener noreferrer">OPEN COLAB</a>
+    </section>
+  </template>
 
-            <article class="project">
-              <div class="project-head">
-                <h3>NE-WEB---HALF-PUSHED</h3>
-                <span class="file-type">REPOSITORY</span>
-              </div>
-              <p>An in-progress web project kept in the public workshop.</p>
-              <a href="https://github.com/Hettigo/NE-WEB---Half-pushed" target="_blank" rel="noreferrer">OPEN REPOSITORY</a>
-            </article>
+  <template id="neurasense-template">
+    <section class="output project-output" aria-label="Neurasense project">
+      <div class="file-meta"><span>NEURASENSE.TXT</span><span>WEBSITE</span></div>
+      <h2>Neurasense</h2><p class="large">One system for a growing product family.</p>
+      <p>A Next.js marketing site with a shared content model, product pages, and a visual language that can stretch across different products without losing its identity.</p>
+      <div class="spec"><span>BUILT WITH</span><span>Next.js · JavaScript · design tokens</span></div>
+      <a class="external" href="https://nswb.vercel.app" target="_blank" rel="noopener noreferrer">OPEN NEURASENSE</a>
+    </section>
+  </template>
 
-            <article class="project">
-              <div class="project-head">
-                <h3>REGISTER</h3>
-                <span class="file-type">FORK</span>
-              </div>
-              <p>A fork of the is-a.dev domain registry: a community project for developer subdomains.</p>
-              <a href="https://github.com/Hettigo/register" target="_blank" rel="noreferrer">OPEN REPOSITORY</a>
-            </article>
-          </div>
-
-          <p class="directory-note">TOTAL: 03 PUBLIC ITEMS &nbsp;|&nbsp; SOURCE: GITHUB.COM/HETTIGO</p>
-        </section>
-
-        <section id="about" class="section text-file" aria-labelledby="about-title">
-          <div class="section-title">
-            <h2 id="about-title">ABOUT.TXT</h2>
-            <span>READ ONLY</span>
-          </div>
-          <p>I live in Colombo, Sri Lanka. This page is a plain record of the software projects and personal interests I keep in public. No pitch deck. No glossy layer. Just work in progress.</p>
-        </section>
-
-        <section id="contact" class="section contact" aria-labelledby="contact-title">
-          <div class="section-title">
-            <h2 id="contact-title">CONTACT</h2>
-            <span>NETWORK READY</span>
-          </div>
-          <p class="prompt-line"><span>C:\&gt;</span> Choose a connection:</p>
-          <div class="contact-links">
-            <a href="https://www.linkedin.com/in/isuruhettigoda/" target="_blank" rel="noreferrer">[ LINKEDIN ]</a>
-            <a href="https://github.com/Hettigo" target="_blank" rel="noreferrer">[ GITHUB ]</a>
-          </div>
-        </section>
-      </main>
-
-      <footer>
-        <p>C:\&gt; <span class="cursor" aria-hidden="true">_</span></p>
-        <p>END OF FILE</p>
-      </footer>
-    </div>
-    <script src="script.js"></script>
-  </body>
+  <template id="vibe-template">
+    <section class="output project-output" aria-label="Vibe project">
+      <div class="file-meta"><span>VIBE.TXT</span><span>PROTOTYPE</span></div>
+      <h2>Vibe</h2><p class="large">An experiment in how communities organise.</p>
+      <p>The prototype models organisations, communities and goal-driven societies. It explores membership, roles, invitations, shared activity and the boundaries between groups.</p>
+      <div class="spec"><span>STATE</span><span>Prototype under exploration</span></div>
+    </section>
+  </template>
+</body>
 </html>
